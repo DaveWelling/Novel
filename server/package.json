@@ -1,0 +1,23 @@
+{
+  "name": "novel-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "blipp": "^2.3.0",
+    "boom": "^4.2.0",
+    "glue": "^4.0.0",
+    "good": "^7.1.0",
+    "good-console": "^6.3.1",
+    "good-squeeze": "^5.0.1",
+    "hapi": "^16.0.1",
+    "lodash": "^4.17.2",
+    "mongodb": "^2.2.14",
+    "mongodb-extended-json": "^1.8.0"
+  }
+}

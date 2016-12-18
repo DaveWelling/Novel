@@ -1,0 +1,28 @@
+{
+  "name": "novel-client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "angular": "^1.6.0",
+    "angular-animate": "^1.6.0",
+    "angular-bootstrap": "^0.12.2",
+    "angular-gantt": "^1.2.14",
+    "angular-moment": "^1.0.1",
+    "angular-ui-router": "^0.3.2",
+    "angular-ui-tree": "^2.22.1",
+    "bootstrap": "^3.3.7",
+    "css-element-queries": "^0.3.2",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.1.1",
+    "lodash": "^4.17.2",
+    "moment-range": "^2.2.0",
+    "textangular": "^1.5.16",
+    "toastr": "^2.1.2"
+  }
+}
