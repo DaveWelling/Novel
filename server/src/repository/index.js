@@ -9,7 +9,6 @@ module.exports = {
 function init(entities) {
     const cnnc = mongo.MongoClient.connect(url, {db: {bufferMaxEntries: 0}});
     return cnnc.then(db=> {
-        const collections = {};
         const repositories = {};
         entities.forEach(entity =>{
             repositories[entity] = repository(db.collection(entity));
@@ -48,7 +47,7 @@ function repository(collection) {
                 $push: {revisions: oldDoc},
                 $set: _.omit(document, ['_id', 'revisions', 'rev'])
             };
-            return _collection.updateOne({id: document.id, deleted: {$exists: false}}, update);
+            return _collection.updateOne({_id: document._id, deleted: {$exists: false}}, update);
         });
     }
 

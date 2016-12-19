@@ -1,23 +1,27 @@
 (function (module) {
     'use strict';
 
-    module.service('eventService', service);
+    module.service('EntityService', service);
 
     service.$inject = ["$http"];
 
     function service($http) {
         //ctor
-        function EventService() {
+        function EntityService(entityName) {
             // public interface
             this.get = get;
             this.update = update;
             this.insert = insert;
-
+            var rootUrl = '/api/' + entityName;
             function get(id) {
                 if (id){
-                    return $http.get('/api/event/' + id.$oid).then(setAllLoaded);
+                    if (typeof id === 'object') {
+                        return $http.get(rootUrl + '/' + id.$oid).then(setAllLoaded);
+                    } else {
+                        return $http.get(rootUrl + '/' + id).then(setAllLoaded);
+                    }
                 }
-                return $http.get('/api/event').then(setAllLoaded);
+                return $http.get(rootUrl).then(setAllLoaded);
             }
             function setAllLoaded(result){
                 if (Array.isArray(result.data)) {
@@ -34,7 +38,7 @@
 
             function update(entity){
                 var entityToSave = prepareEntity(entity);
-                return $http.put('/api/event', entityToSave).then(function(){
+                return $http.put(rootUrl, entityToSave).then(function(){
                     entity.rev++;
                 });
             }
@@ -42,7 +46,7 @@
 
             function insert(entity){
                 var entityToSave = prepareEntity(entity);
-                return $http.post('/api/event', entityToSave).then(function(){
+                return $http.post(rootUrl, entityToSave).then(function(){
                     entity.rev=0;
                     entity.loaded = true;
                 });
@@ -58,6 +62,6 @@
 
         }
 
-        return new EventService();
+        return EntityService;
     }
 })(angular.module('novel'));

@@ -1,8 +1,9 @@
 angular.module('novel').controller('NovelController', controller);
 
-controller.$inject = ['$scope', '$state', 'novelService', 'ObjectId', 'eventService'];
+controller.$inject = ['$scope', '$state', 'novelService', 'ObjectId', 'EntityService'];
 
-function controller($scope, $state, novelService, ObjectId, eventService) {
+function controller($scope, $state, novelService, ObjectId, EntityService) {
+    var eventService = new EntityService('event');
     // Novel state
     $scope.novel = {title: 'placeholder', events: []};
 
@@ -64,7 +65,8 @@ function controller($scope, $state, novelService, ObjectId, eventService) {
                 if (!novel.events || novel.events.length === 0) {
                     return createStarterEvent(novel);
                 } else {
-                    return $state.transitionTo('novel.events');
+                    //return $state.transitionTo('novel.events');
+                    return new Promise(function(resolve){ resolve();});
                 }
             })
         }).catch(function (err) {

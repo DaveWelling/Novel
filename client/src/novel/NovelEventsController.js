@@ -1,27 +1,35 @@
 angular.module('novel').controller('NovelEventsController', controller);
-controller.$inject = ['$scope', 'ObjectId', 'eventService', '$stateParams'];
-function controller($scope, ObjectId, eventService, $stateParams) {
-
-    $scope.currentEvent = {};
+controller.$inject = ['$scope', 'ObjectId', 'EntityService', '$state'];
+function controller($scope, ObjectId, EntityService, $state) {
+    var entityService;
+    $scope.init = function(entityType, novelPropertyName) {
+        $scope.novelArrayProperty = novelPropertyName;
+        $scope.entityType = entityType;
+        entityService = new EntityService(entityType);
+        $scope.entityTitle = _.startCase(entityType);
+        $scope.entityPluralTitle = _.startCase(novelPropertyName);
+    };
+    $scope.isCollapsed = true;
+    $scope.currentEntity = {};
 
     $scope.$on('initComplete', function(){
-        var selectedEvent = $scope.novel.events[0];
-        loadSelectedEvent(selectedEvent);
-        $scope.currentEvent = selectedEvent;
+        var selectedEntity = $scope.novel[$scope.novelArrayProperty][0];
+        loadSelectedEntity(selectedEntity);
+        $scope.currentEntity = selectedEntity;
     });
 
-    $scope.eventSubmit = function(){
-        var eventToUpdate = $scope.currentEvent;
-        if (typeof eventToUpdate.rev === 'undefined'){
-            eventService.insert(eventToUpdate).then(function(results){
+    $scope.entitySubmit = function(){
+        var entityToUpdate = $scope.currentEntity;
+        if (typeof entityToUpdate.rev === 'undefined'){
+            entityService.insert(entityToUpdate).then(function(results){
                 $scope.$emit('saveNovel');
             }).catch(function (err) {
                 console.error(err);
                 toastr.error(err.message, 'Failed to create the novel');
             });
         } else {
-            eventService.update(eventToUpdate).then(function (results) {
-                toastr.success("Event Saved", "Saved");
+            entityService.update(entityToUpdate).then(function (results) {
+                toastr.success(_.startCase($scope.entityType) +" Saved", "Saved");
                 $scope.$emit('saveNovel');
             }).catch(function (err) {
                 console.error(err);
@@ -29,21 +37,21 @@ function controller($scope, ObjectId, eventService, $stateParams) {
             });
         }
     };
-    $scope.eventSelected = function(scope){
-        var selectedEvent = scope.$modelValue;
-        loadSelectedEvent(selectedEvent);
-        $scope.currentEvent = selectedEvent;
+    $scope.entitySelected = function(scope){
+        var selectedEntity = scope.$modelValue;
+        $scope.currentEntity = selectedEntity;
+        loadSelectedEntity(selectedEntity);
     };
 
-    function loadSelectedEvent(event){
+    function loadSelectedEntity(entity){
         // loaded already or never saved.
-        if (event.loaded || !event.rev) return;
-        eventService.get(event._id).then(function(results){
-            _.merge(event, results.data);
-            event.loaded = true;
+        if (entity.loaded || !entity.rev) return;
+        entityService.get(entity._id).then(function(results){
+            _.merge(entity, results.data);
+            entity.loaded = true;
         }).catch(function(err){
             console.error(err);
-            toastr.error(err.message, 'Failed to load event ' + event.title);
+            toastr.error(err.message, 'Failed to load ' + $scope.entityType + ' ' + entity.title);
         })
     }
 
@@ -64,70 +72,27 @@ function controller($scope, ObjectId, eventService, $stateParams) {
 
     $scope.newSubItem = function (scope, clickEvent) {
         clickEvent.stopPropagation();
-        var event = scope.$modelValue;
-        var newEvent = {
+        var entity = scope.$modelValue;
+        var newEntity = {
             _id: new ObjectId().toOid(),
             title: {value:'', type:'shortText'},
             children: []
         };
-        event.children.push(newEvent);
-        $scope.currentEvent = newEvent;
+        entity.children.push(newEntity);
+        $scope.currentEntity = newEntity;
     };
 
-    $scope.collapseAll = function () {
+    $scope.resizeFull = function(scope){
+        $state.go($scope.entityType, {entityId: scope.$modelValue._id.$oid});
+    };
+    $scope.collapseAll = function (clickEvent) {
+        clickEvent.stopPropagation();
         $scope.$broadcast('angular-ui-tree:collapse-all');
     };
 
-    $scope.expandAll = function () {
+    $scope.expandAll = function (clickEvent) {
+        clickEvent.stopPropagation();
         $scope.$broadcast('angular-ui-tree:expand-all');
     };
 
-    // $scope.data = [{
-    //     'id': 1,
-    //     'title': 'node1',
-    //     'children': [
-    //         {
-    //             'id': 11,
-    //             'title': 'node1.1',
-    //             'children': [
-    //                 {
-    //                     'id': 111,
-    //                     'title': 'node1.1.1',
-    //                     'children': []
-    //                 }
-    //             ]
-    //         },
-    //         {
-    //             'id': 12,
-    //             'title': 'node1.2',
-    //             'children': []
-    //         }
-    //     ]
-    // }, {
-    //     'id': 2,
-    //     'title': 'node2',
-    //     'nodrop': true, // An arbitrary property to check in custom template for nodrop-enabled
-    //     'children': [
-    //         {
-    //             'id': 21,
-    //             'title': 'node2.1',
-    //             'children': []
-    //         },
-    //         {
-    //             'id': 22,
-    //             'title': 'node2.2',
-    //             'children': []
-    //         }
-    //     ]
-    // }, {
-    //     'id': 3,
-    //     'title': 'node3',
-    //     'children': [
-    //         {
-    //             'id': 31,
-    //             'title': 'node3.1',
-    //             'children': []
-    //         }
-    //     ]
-    // }];
 }

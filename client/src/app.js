@@ -33,10 +33,15 @@ angular.module('novel', [
             templateUrl: 'src/novel/novelTemplate.html',
             controller: 'NovelController'
         })
-        .state('novel.events', {
-            url: 'events',
-            templateUrl: 'src/novel/novelEventsTemplate.html',
-            controller: 'NovelEventsController'
+        .state('event', {
+            url: '/event/:entityId',
+            templateUrl: 'src/event/eventTemplate.html',
+            controller: 'EventController',
+            resolve: {
+                entityType: function(){return 'event';},
+                novelPropertyName : function(){return 'events';}
+            }
         });
+
 
 });

@@ -2,7 +2,9 @@
 </dynamic-form>
 <div class="panel panel-default">
     <div class="panel-body">
-        <ui-view>
-        </ui-view>
+        <div ng-controller="NovelEventsController"
+             ng-init="init('event','events')">
+            <div ng-include="'src/novel/novelEventsTemplate.html'"></div>
+        </div>
     </div>
 </div>

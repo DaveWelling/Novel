@@ -1,6 +1,8 @@
 (function (module) {
     module.directive("dynamicForm", dynamicForm);
 
+    dynamicForm.$inject = ['$compile', '$uibModal']
+
     function dynamicForm($compile, $modal) {
         const objectPropertiesNotToRender = ['_id', 'rev', 'events', 'children', '$$hashKey', 'loaded'];
         return {
@@ -38,7 +40,7 @@
         }
 
         function redrawEntity(scope, element){
-            if (!scope.entity._id) return;
+            if (!scope.entity || !scope.entity._id) return;
             scope.formId = scope.entity._id.$oid;
             addNewElements(element, scope.entity, scope);
 
