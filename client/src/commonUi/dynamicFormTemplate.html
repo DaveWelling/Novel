@@ -1,35 +1,52 @@
-<div class="container-fluid">
+<div class="container-fluid kill-left-padding">
     <div class="row ">
-        <h3>{{title}}</h3>
+        <div class="col-xs-10 col-md-11">
+            <h4>{{title}}</h4>
+        </div>
+        <div class="col-xs-2 col-md-1">
+            <button class="btn btn-novel pull-right" ng-click="editMode = !editMode">
+                <i class="glyphicon glyphicon-edit"></i>
+            </button>
+        </div>
     </div>
     <div class="row">
-        <div class="col-xs-11 overrideLeftColumn">
+        <div ng-class="{'col-xs-11': editMode, 'col-xs-12': !editMode, overrideLeftColumn: true}">
             <div class="panel panel-default">
-                <div class="panel-body">
-                    <form id="form{{formId}}" name="form{{formId}}">
+                <div class="panel-body" >
+                    <div class="row" name="dynamicFormHolder">
 
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-xs-1 overrideRightColumn">
-            <h5 class="buttonBarHeaderText">Add</h5>
-            <div class="btn-group-vertical" role="group">
-                <button type="button" class="btn btn-default btn-novel editorButtons btn-xs"
-                        ng-click="open('shortText')">
-                    <img class="buttonIcon" src="images/TextBox.svg"/>
+        <div ng-show="editMode" class="col-xs-1 overrideRightColumn">
+            <div class="btn-group-vertical btn-novel editor-button-group" role="group">
+                <h5 class="buttonBarHeaderText ">Add:</h5>
+                <hr class="button-bar-break">
+                <button type="button" class="btn btn-default btn-novel editorButtons btn-xs" ng-click="open('shortText')">
+                    <img class="buttonIconTall" src="images/TextBox.svg"/>
                 </button>
-                <button type="button" class="btn btn-default btn-novel editorButtons btn-xs"
-                        ng-click="open('textArea')">
-                    <img class="buttonIcon" src="images/TextArea.svg"/>
+                <button type="button" class="btn btn-default btn-novel editorButtons btn-xs" ng-click="open('textArea')">
+                    <img class="buttonIconTall" src="images/TextArea.svg"/>
                 </button>
-                <button type="button" class="btn btn-default btn-novel editorButtons btn-xs"
-                        ng-click="open('date')">
+                <button type="button" class="btn btn-default btn-novel editorButtons btn-xs" ng-click="open('date')">
                     <i class="glyphicon glyphicon-calendar"></i>
                 </button>
-                <button type="button" class="btn btn-default btn-novel editorButtons btn-xs"
-                        ng-click="open('time')">
+                <button type="button" class="btn btn-default btn-novel editorButtons btn-xs" ng-click="open('time')">
                     <i class="glyphicon glyphicon-time"></i>
+                </button>
+            </div>
+            <div class="btn-group-vertical btn-novel editor-button-group" role="group">
+                <h5 class="buttonBarHeaderText ">Change:</h5>
+                <hr class="button-bar-break">
+                <button type="button" class="btn btn-default btn-novel editorButtons btn-xs" ng-click="removeMode = !removeMode">
+                    <i class="glyphicon glyphicon-remove"></i>
+                </button>
+                <button type="button" class="btn btn-default btn-novel editorButtons btn-xs" ng-click="moveUpMode = !moveUpMode">
+                    <i class="glyphicon glyphicon-arrow-up"></i>
+                </button>
+                <button type="button" class="btn btn-default btn-novel editorButtons btn-xs" ng-click="moveDownMode = !moveDownMode">
+                    <i class="glyphicon glyphicon-arrow-down"></i>
                 </button>
             </div>
         </div>

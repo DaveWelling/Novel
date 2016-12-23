@@ -1,0 +1,23 @@
+.panel-heading {
+    padding: 2px 0px 0px 5px;
+    border-bottom: 1px solid transparent;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+.panel-group .panel {
+    margin-bottom: 6px;
+    border-radius: 2px;
+}
+
+/*.form-group {
+    padding-bottom: 0px;
+    margin: 0px;
+}*/
+.btn{
+    padding: 6px 8px;
+}
+
+.kill-left-padding {
+    padding-left: 0px;
+}

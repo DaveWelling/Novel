@@ -1,3 +1,7 @@
+.buttonIconTall{
+    height:2.5em;
+    width: 2em;
+}
 .buttonIcon{
     height:2em;
     width: 2em;
@@ -6,10 +10,14 @@
     color: #333;
     background-color: ghostwhite;
     border-color:#ccc;
+    z-index: 100;
+}
+.btn-tree {
+    margin: 0px;
 }
 .buttonBarHeaderText{
     margin-bottom: 2px;
-    margin-top: 2px;
+    margin-top: 5px;
     margin-left: 4px;
     color: #337ab7;
 }
@@ -17,8 +25,38 @@
     margin-bottom: .25em;
 }
 .overrideRightColumn {
-    padding-left: 0;
+    padding-left: 5px;
 }
 .overrideLeftColumn {
     padding-right: 0;
+}
+.button-bar-break{
+    margin: 5px;
+}
+.ta-toolbar{
+  display: none;
+}
+.ta-toolbar.focussed{
+  display: block;
+}
+.form-control {
+    height: 38px;
+    padding: 2px 12px;
+    font-size: 16px;
+    line-height: 1.42857143;
+}
+.editor-button-group {
+    border-radius: 2px;
+    border-style: solid;
+    border-width: thin;
+    border-color: #337ab7;
+}
+.removable:hover{
+    background: red;
+}
+.moveUpable:hover{
+    background: green;
+}
+.moveDownable:hover{
+    background: green;
 }

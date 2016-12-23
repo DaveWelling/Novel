@@ -17,6 +17,7 @@
     "angular-ui-router": "^0.3.2",
     "angular-ui-tree": "^2.22.1",
     "bootstrap": "^3.3.7",
+    "bootstrap-material-design": "^0.5.10",
     "css-element-queries": "^0.3.2",
     "font-awesome": "^4.7.0",
     "jquery": "^3.1.1",
@@ -24,5 +25,11 @@
     "moment-range": "^2.2.0",
     "textangular": "^1.5.16",
     "toastr": "^2.1.2"
+  },
+  "devDependencies": {
+    "eslint": "^3.12.2",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-plugin-promise": "^3.4.0",
+    "eslint-plugin-standard": "^2.0.1"
   }
 }

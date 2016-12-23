@@ -1,10 +1,10 @@
 <dynamic-form entity="novel" submit-method="novelSubmit" title="Novel">
 </dynamic-form>
-<div class="panel panel-default">
-    <div class="panel-body">
-        <div ng-controller="NovelEventsController"
-             ng-init="init('event','events')">
-            <div ng-include="'src/novel/novelEventsTemplate.html'"></div>
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div ng-repeat="entity in entities">
+        <div ng-controller="NovelEntityController" ng-init="init(entity.name,entity.plural)">
+            <div ng-include="'src/novel/novelEntity/novelEntityTemplate.html'">
+            </div>
         </div>
     </div>
 </div>

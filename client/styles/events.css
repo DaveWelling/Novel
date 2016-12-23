@@ -39,6 +39,7 @@ tr.angular-ui-tree-empty {
     border: 1px solid #dae2ea;
     background: #f8faff;
     color: #7c9eb2;
+    border-radius: 2px;
 }
 
 .nodrop {

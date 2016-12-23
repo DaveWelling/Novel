@@ -4,7 +4,7 @@ const options = { relativeTo: __dirname };
 
 const glueCallback = function (err, server) {
     if (err) {
-        //noinspection Eslint
+        // noinspection Eslint
         console.error(err);
     }
     server.settings.debug.log.push('error');

@@ -2,9 +2,10 @@
   "name": "novel-server",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "src/app.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "start": "node ./src/app.js"
   },
   "author": "",
   "license": "MIT",
@@ -19,5 +20,11 @@
     "lodash": "^4.17.2",
     "mongodb": "^2.2.14",
     "mongodb-extended-json": "^1.8.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.12.2",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-plugin-promise": "^3.4.0",
+    "eslint-plugin-standard": "^2.0.1"
   }
 }

@@ -1,60 +1,74 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="novel">
+
 <head>
     <base href="http://novel.davewelling.com/index.html" />
     <meta charset="UTF-8">
     <title>Novel</title>
+    <!-- Material Design fonts -->
 
-    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
+
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
     <!--<link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css"/>-->
-    <link rel="stylesheet" href="node_modules/angular-ui-tree/dist/angular-ui-tree.css"/>
-    <link rel="stylesheet" href="node_modules/angular-gantt/assets/angular-gantt.css"/>
-    <link rel="stylesheet" href="node_modules/angular-gantt/assets/angular-gantt-plugins.css"/>
-    <link rel="stylesheet" href="node_modules/textangular/dist/textAngular.css"/>
-    <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="node_modules/angular-ui-tree/dist/angular-ui-tree.css" />
+    <link rel="stylesheet" href="node_modules/angular-gantt/assets/angular-gantt.css" />
+    <link rel="stylesheet" href="node_modules/angular-gantt/assets/angular-gantt-plugins.css" />
+    <link rel="stylesheet" href="node_modules/textangular/dist/textAngular.css" />
+    <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css" />
+
+    <!-- Bootstrap Material Design -->
+    <link rel="stylesheet" type="text/css" href="node_modules/bootstrap-material-design/dist/css/bootstrap-material-design.css">
+    <link rel="stylesheet" type="text/css" href="node_modules/bootstrap-material-design/dist/css/ripples.min.css">
+
     <!--<link rel="stylesheet" href="node_modules/angular-ui-grid/ui-grid.min.css"/>-->
-    <link rel="stylesheet" href="node_modules/toastr/build/toastr.css"/>
+    <link rel="stylesheet" href="node_modules/toastr/build/toastr.css" />
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/events.css">
     <link rel="stylesheet" href="styles/formEditor.css">
 </head>
+
 <body>
-<div class="container">
-<!--<a ui-sref="gantt" ui-sref-active="active">Gantt</a>-->
-<ui-view></ui-view>
-</div>
+    <div class="container">
+        <!--<a ui-sref="gantt" ui-sref-active="active">Gantt</a>-->
+        <ui-view></ui-view>
+    </div>
 
-<script src="node_modules/jquery/dist/jquery.min.js"></script>
-<script src="node_modules/angular/angular.js"></script>
-<script src="node_modules/moment/moment.js"></script>
-<script src="node_modules/angular-moment/angular-moment.js"></script>
-<script src="node_modules/moment-range/dist/moment-range.min.js"></script>
-<script src="node_modules/angular-animate/angular-animate.min.js"></script>
-<script src="node_modules/angular-gantt/assets/angular-gantt.js"></script>
-<script src="node_modules/angular-ui-tree/dist/angular-ui-tree.js"></script>
-<script src="node_modules/angular-gantt/assets/angular-gantt-plugins.js"></script>
-<script src="node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js"></script>
-<script src="node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
-<script src="node_modules/css-element-queries/src/ElementQueries.js"></script>
-<script src="node_modules/css-element-queries/src/ResizeSensor.js"></script>
-<script src="node_modules/toastr/build/toastr.min.js"></script>
-<script src="node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
-<script src="node_modules/lodash/lodash.min.js"></script>
-<script src="node_modules/rangy/lib/rangy-core.js"></script>
-<script src="node_modules/rangy/lib/rangy-selectionsaverestore.js"></script>
-<script src="node_modules/textangular/dist/textAngular-rangy.min.js"></script>
-<script src="node_modules/textangular/dist/textAngular-sanitize.min.js"></script>
-<script src="node_modules/textangular/dist/textAngular.min.js"></script>
+    <script src="node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="node_modules/angular/angular.js"></script>
+    <script src="node_modules/moment/moment.js"></script>
+    <script src="node_modules/angular-moment/angular-moment.js"></script>
+    <script src="node_modules/moment-range/dist/moment-range.min.js"></script>
+    <script src="node_modules/angular-animate/angular-animate.min.js"></script>
+    <script src="node_modules/angular-gantt/assets/angular-gantt.js"></script>
+    <script src="node_modules/angular-ui-tree/dist/angular-ui-tree.js"></script>
+    <script src="node_modules/angular-gantt/assets/angular-gantt-plugins.js"></script>
+    <script src="node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js"></script>
+    <script src="node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
+    <script src="node_modules/css-element-queries/src/ElementQueries.js"></script>
+    <script src="node_modules/css-element-queries/src/ResizeSensor.js"></script>
+    <script src="node_modules/toastr/build/toastr.min.js"></script>
+    <script src="node_modules/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="node_modules/lodash/lodash.min.js"></script>
+    <script src="node_modules/rangy/lib/rangy-core.js"></script>
+    <script src="node_modules/rangy/lib/rangy-selectionsaverestore.js"></script>
+    <script src="node_modules/textangular/dist/textAngular-rangy.min.js"></script>
+    <script src="node_modules/textangular/dist/textAngular-sanitize.min.js"></script>
+    <script src="node_modules/textangular/dist/textAngular.min.js"></script>
+    <script src="node_modules/bootstrap-material-design/dist/js/material.min.js"></script>
+    <script src="node_modules/bootstrap-material-design/dist/js/ripples.min.js"></script>
 
-<script src="src/app.js"></script>
-<script src="src/gantt/GanttController.js"></script>
-<script src="src/novel/NovelController.js"></script>
-<script src="src/novel/NovelEventsController.js"></script>
-<script src="src/event/EventController.js"></script>
-<script src="src/gantt/sample.js"></script>
-<script src="src/novel/novelService.js"></script>
-<script src="src/commonUi/dynamicForm.js"></script>
-<script src="src/ObjectId.js"></script>
-<script src="src/EntityService.js"></script>
+    <script src="src/app.js"></script>
+    <script src="src/gantt/GanttController.js"></script>
+    <script src="src/novel/NovelController.js"></script>
+    <script src="src/novel/novelEntity/NovelEntityController.js"></script>
+    <script src="src/entity/EntityController.js"></script>
+    <script src="src/gantt/sample.js"></script>
+    <script src="src/novel/novelService.js"></script>
+    <script src="src/commonUi/dynamicForm.js"></script>
+    <script src="src/ObjectId.js"></script>
+    <script src="src/EntityService.js"></script>
 </body>
+
 </html>

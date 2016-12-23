@@ -17,13 +17,17 @@ angular.module('novel', [
     'ui.router',
     'ui.tree',
     'textAngular'
-]).config(function ($stateProvider, $urlRouterProvider, $locationProvider) {
-
+]).constant('config', {
+    entities: [
+        {name: 'event', plural: 'events'},
+        {name: 'character', plural: 'characters'}
+    ]
+}).config(function($stateProvider, $urlRouterProvider, $locationProvider){
     $locationProvider.html5Mode(true); // Remove # from url
-    //$urlRouterProvider.when('/', '/gantt');
+    // $urlRouterProvider.when('/', '/gantt');
 
     $stateProvider
-        .state('gantt',{
+        .state('gantt', {
             url: '/gantt',
             templateUrl: 'src/gantt/ganttTemplate.html',
             controller: 'GanttController'
@@ -33,15 +37,9 @@ angular.module('novel', [
             templateUrl: 'src/novel/novelTemplate.html',
             controller: 'NovelController'
         })
-        .state('event', {
-            url: '/event/:entityId',
-            templateUrl: 'src/event/eventTemplate.html',
-            controller: 'EventController',
-            resolve: {
-                entityType: function(){return 'event';},
-                novelPropertyName : function(){return 'events';}
-            }
+        .state('entity', {
+            url: '/:entityTypeName/:entityId',
+            templateUrl: 'src/entity/entityTemplate.html',
+            controller: 'EntityController'
         });
-
-
 });
