@@ -3,9 +3,11 @@
   "installedESLint": true,
   "plugins": [
     "standard",
-    "promise"
+    "promise",
+    "mocha"
   ],
   "rules": {
+    "mocha/no-exclusive-tests": "error",
     "indent": [
       2,
       4
@@ -22,5 +24,9 @@
       2,
       "never"
     ]
+  },
+  "env": {
+    "mocha" : true,
+    "node": true
   }
 }

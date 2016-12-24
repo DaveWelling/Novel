@@ -3,14 +3,15 @@ const url = 'mongodb://localhost:27017/novel';
 const _ = require('lodash');
 
 module.exports = {
-    init
+    init,
+    repository
 };
 
 function init(entities) {
-    const cnnc = mongo.MongoClient.connect(url, {db: {bufferMaxEntries: 0}});
-    return cnnc.then(db=> {
+    const cnnc = mongo.MongoClient.connect(url, { db: { bufferMaxEntries: 0 } });
+    return cnnc.then(db => {
         const repositories = {};
-        entities.forEach(entity =>{
+        entities.forEach(entity => {
             repositories[entity] = repository(db.collection(entity));
         });
         return repositories;
@@ -37,30 +38,35 @@ function repository(collection) {
         // get current document
         return _collection.find({
             _id: document._id,
-            deleted: {$exists: false}
-        }, {'revisions': 0}).next().then(oldDoc => {
+            deleted: { $exists: false }
+        }, { 'revisions': 0 }).next().then(oldDoc => {
+            console.log(`old rev: ${oldDoc.rev} | new rev: ${document.rev}`);
             if (oldDoc.rev > document.rev) {
                 throw new Error(`The document ${document.title} has been updated by something else since you got this version.`);
             }
             const update = {
-                $inc: {'rev': 1},
-                $push: {revisions: oldDoc},
+                $inc: { 'rev': 1 },
+                $push: { revisions: { '$each': [oldDoc], '$slice': -10 } },
                 $set: _.omit(document, ['_id', 'revisions', 'rev'])
             };
-            return _collection.updateOne({_id: document._id, deleted: {$exists: false}}, update);
+            return _collection.updateOne({ _id: document._id, deleted: { $exists: false } }, update).then(result => {
+                if (result.matchedCount !== 1 || result.modifiedCount !== 1) {
+                    throw new Error(`The document ${JSON.stringify(document)} may have been updated by something else since you got this version. Unexpected match or modified count: ${result}`);
+                }
+                return result;
+            });
         });
     }
 
     function remove(id) {
-        return _collection.updateOne({_id: id}, {$set: {deleted: true}});
+        return _collection.updateOne({ _id: id }, { $set: { deleted: true } });
     }
 
     function get(id) {
-        return _collection.find({_id: id, deleted: {$exists: false}}, {revisions: 0}).next();
+        return _collection.find({ _id: id, deleted: { $exists: false } }, { revisions: 0 }).next();
     }
 
     function getAll() {
-        return _collection.find({deleted: {$exists: false}}, {revisions: 0}).toArray();
+        return _collection.find({ deleted: { $exists: false } }, { revisions: 0 }).toArray();
     }
 }
-
