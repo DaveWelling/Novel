@@ -7,13 +7,12 @@
         const objectPropertiesNotToRender = ['_id', 'rev', 'events', 'children', '$$hashKey', 'loaded'];
         config.entities.forEach(function(entity) {
             objectPropertiesNotToRender.push(entity.plural);
-        })
+        });
         return {
-            templateUrl: "src/commonUi/dynamicFormTemplate.html",
+            templateUrl: 'src/commonUi/dynamicFormTemplate.html',
             restrict: 'E',
             scope: { // Isolated scope
                 entity: '=',
-                submitMethod: '=',
                 title: '@'
             },
             link: link
@@ -37,7 +36,7 @@
             scope.$watch('entity', function() {
                 redrawEntity(scope, element);
             });
-            scope.$watchCollection('entity', function() {
+            scope.$watchCollection('entity', function(newValues, oldValues, entityScope) {
                 redrawEntity(scope, element);
             });
         }
@@ -51,27 +50,14 @@
         function addNewElements(parentElement, entity, scope) {
             var container = parentElement.find('div[name="dynamicFormHolder"]');
             container.empty();
-            var form = angular.element('<div class="col-md-11 col-xs-12"><form id="form{{formId}}" name="form{{formId}}"></form></div>');
+            // Debounce the changes so they don't happen too often
+            var form = angular.element('<div class="col-xs-12"><form ng-model-options="{ allowInvalid: false, debounce: 5000 }" id="form{{formId}}" name="form{{formId}}"></form></div>');
+            // var form = angular.element('<div class="col-xs-12"><form id="form{{formId}}" name="form{{formId}}"></form></div>');
             $compile(form)(scope);
             container.append(form);
             var newElement = angular.element(getElements(entity));
             $compile(newElement)(scope);
             form.append(newElement);
-            var submitButton = angular.element('<div class="col-md-1 col-xs-12"><button class="submitBtn btn btn-novel pull-right" ng-click="submitMethod()"><i class="glyphicon glyphicon-floppy-disk"></i></button></div>');
-            $compile(submitButton)(scope);
-            container.append(submitButton);
-
-            // addDebugging(form, scope);
-        }
-
-        // This doesn't work.  Scoping problem?
-        function addDebugging(form, scope) {
-            var formId = scope.formId;
-            var template = "<span> Dirty: {{form" + formId + ".$dirty}} <br>" +
-                "Touched: {{form" + formId + ".$touched}} <br>" +
-                "Valid: {{form" + formId + ".$valid}}</span>";
-            $compile(template)(scope);
-            form.append(template);
         }
 
         function getElements(entity) {
@@ -113,14 +99,14 @@
         function getShortText(inputId, label, entityValueExpression) {
             return '<div class="form-group label-floating"> ' +
                 '<label class="control-label" for="' + inputId + '">' + label + ': </label>' +
-                '<input id="' + inputId + '" class="form-control" type="text" ng-model="' + entityValueExpression + '">' +
+                '<input id="' + inputId + '" class="form-control" type="text" ng-model-options="{ debounce: ' + config.uiDebounce + ' }" ng-model="' + entityValueExpression + '">' +
                 '</div>';
         }
 
         function getTextArea(inputId, label, entityValueExpression) {
             return '<div class="form-group"> ' +
                 '<label class="label-static" for="' + inputId + '">' + label + ': </label>' +
-                '<text-angular id="' + inputId + '" ng-model="' + entityValueExpression + '"></text-angular>' +
+                '<text-angular id="' + inputId + '" ng-model-options="{ debounce: ' + config.uiDebounce + ' }" ng-model="' + entityValueExpression + '"></text-angular>' +
                 '</div>';
         }
 

@@ -10,7 +10,10 @@
     "mocha/no-exclusive-tests": "error",
     "indent": [
       2,
-      4
+      4,
+      {
+        "SwitchCase": 1
+      }
     ],
     "semi": [
       2,
@@ -26,7 +29,7 @@
     ]
   },
   "env": {
-    "mocha" : true,
+    "mocha": true,
     "node": true
   }
 }

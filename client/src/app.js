@@ -21,8 +21,9 @@ angular.module('novel', [
     entities: [
         {name: 'event', plural: 'events'},
         {name: 'character', plural: 'characters'}
-    ]
-}).config(function($stateProvider, $urlRouterProvider, $locationProvider){
+    ],
+    uiDebounce: 5000
+}).config(function($stateProvider, $urlRouterProvider, $locationProvider) {
     $locationProvider.html5Mode(true); // Remove # from url
     // $urlRouterProvider.when('/', '/gantt');
 

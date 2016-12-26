@@ -23,9 +23,9 @@
         }
 
         function entitySubmit() {
-            var eventToUpdate = $scope.currentEntity;
-            entityService.update(eventToUpdate).then(function(results) {
-                toastr.success(eventToUpdate.title, 'Saved');
+            var entityToUpdate = $scope.currentEntity;
+            entityService.patch(entityToUpdate).then(function(results) {
+                toastr.success(entityToUpdate.title, 'Saved');
             }).catch(function(err) {
                 console.error(err);
                 toastr.error(err.message, 'Failed to update the novel');

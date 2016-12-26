@@ -1,40 +1,24 @@
-(function (module) {
+(function(module) {
     'use strict';
 
     module.service('novelService', service);
 
-    service.$inject = ["$http"];
+    service.$inject = ['$http', 'EntityService', 'config'];
 
-    function service($http) {
-        //ctor
-        function NovelService() {
-            // public interface
-            this.get = get;
-            this.update = update;
-            this.insert = insert;
+    function service($http, EntityService, config) {
+        var novelService = new EntityService('novel');
+        var monkeyPatch = novelService.patch;
+        novelService.patch = function(newEntity, previousEntity) {
+            var novelToSave = stripTrees(newEntity);
+            return monkeyPatch(novelToSave, previousEntity);
+        };
+        return novelService;
 
-            function insert(entity){
-                var novelToSave = stripEventTree(entity);
-                return $http.post('/api/novel', novelToSave).then(function(){
-                    entity.rev=0;
-                });
-            }
-
-            function get() {
-                return $http.get('/api/novel');
-            }
-
-            function update(entity){
-                var novelToSave = stripEventTree(entity);
-                return $http.put('/api/novel', novelToSave).then(function(){
-                    entity.rev++;
-                });
-            }
-        }
-
-        function stripEventTree(novel){
-            var newNovel = _.omit(novel, ['events']);
-            newNovel.events = recursiveStripEventTree(novel.events);
+        function stripTrees(novel) {
+            var newNovel = _.omit(novel, _.concat(config.entities, 'loaded'));
+            config.entities.forEach(function(entity) {
+                newNovel[entity.plural] = recursiveStripTree(novel[entity.plural]);
+            });
             return newNovel;
         }
 
@@ -44,21 +28,16 @@
          * @param eventTree
          * @returns {Array}
          */
-        function recursiveStripEventTree(eventTree){
+        function recursiveStripTree(tree) {
             var newTree = [];
-            if (eventTree) {
-                eventTree.forEach(function (event) {
-                    var newEvent = _.pick(event, ['_id', 'title', 'rev']);
-                    if (!event._id.$oid) {
-                        event._id = event._id.toOid();
-                    }
-                    newEvent.children = recursiveStripEventTree(event.children);
-                    newTree.push(newEvent);
+            if (tree) {
+                tree.forEach(function(entity) {
+                    var newEntity = _.pick(entity, ['_id', 'title']);
+                    newEntity.children = recursiveStripTree(entity.children);
+                    newTree.push(newEntity);
                 });
             }
             return newTree;
         }
-
-        return new NovelService();
     }
 })(angular.module('novel'));

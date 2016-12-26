@@ -5,7 +5,6 @@ const deserialize = require('../../node_modules/mongodb-extended-json/lib/deseri
 
 const entities = ['novel', 'character', 'chapter', 'event'];
 const ObjectId = require('mongodb').ObjectId;
-
 module.exports = {
     register: register
 };
@@ -16,7 +15,6 @@ register.attributes = {
 };
 
 function register(server, options, next) {
-
     // Add the status route
     server.route({
         method: 'GET',
@@ -68,15 +66,16 @@ function createRoute(server, routeName, repository) {
         method: 'PUT',
         path: `/${routeName.toLowerCase()}`,
         handler: function(request, reply) {
-            const objPayload = deserialize(request.payload);
-            repository.update(objPayload).then(result => {
-                if (!result) {
-                    return reply(Boom.notFound());
-                }
-                return reply(result)
-            }).catch(function(err) {
-                return reply(Boom.badImplementation(err));
-            });
+            reply(Boom.methodNotAllowed('Use patch instead.'));
+            // const objPayload = deserialize(request.payload);
+            // repository.update(objPayload).then(result => {
+            //     if (!result) {
+            //         return reply(Boom.notFound());
+            //     }
+            //     return reply(result);
+            // }).catch(function(err) {
+            //     return reply(Boom.badImplementation(err));
+            // });
         }
     });
     server.route({
@@ -88,7 +87,22 @@ function createRoute(server, routeName, repository) {
                 if (!result) {
                     return reply(Boom.notFound());
                 }
-                return reply(result)
+                return reply(result);
+            }).catch(function(err) {
+                return reply(Boom.badImplementation(err));
+            });
+        }
+    });
+    server.route({
+        method: 'PATCH',
+        path: `/${routeName.toLowerCase()}/{id}`,
+        handler: function(request, reply) {
+            const objPayload = deserialize(request.payload);
+            repository.patch(request.params.id, objPayload).then(result => {
+                if (!result) {
+                    return reply(Boom.notFound());
+                }
+                return reply(result);
             }).catch(function(err) {
                 return reply(Boom.badImplementation(err));
             });

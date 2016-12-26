@@ -1,6 +1,8 @@
 const mongo = require('mongodb');
 const url = 'mongodb://localhost:27017/novel';
-const _ = require('lodash');
+const patchToMongo = require('../patchToMongo');
+const ObjectId = mongo.ObjectId;
+const Boom = require('boom');
 
 module.exports = {
     init,
@@ -22,11 +24,12 @@ function init(entities) {
 function repository(collection) {
     const _collection = collection;
     return {
-        insert: insert,
-        update: update,
-        remove: remove,
-        get: get,
-        getAll: getAll
+        insert,
+        update,
+        remove,
+        get,
+        getAll,
+        patch
     };
 
     function insert(document) {
@@ -35,26 +38,37 @@ function repository(collection) {
     }
 
     function update(document) {
-        // get current document
-        return _collection.find({
-            _id: document._id,
-            deleted: { $exists: false }
-        }, { 'revisions': 0 }).next().then(oldDoc => {
-            console.log(`old rev: ${oldDoc.rev} | new rev: ${document.rev}`);
-            if (oldDoc.rev > document.rev) {
-                throw new Error(`The document ${document.title} has been updated by something else since you got this version.`);
+        throw new Error('Updates not supported.  Use patch instead.');
+        // // get current document
+        // return _collection.find({
+        //     _id: document._id,
+        //     deleted: { $exists: false }
+        // }, { 'revisions': 0 }).next().then(oldDoc => {
+        //     if (oldDoc.rev > document.rev) {
+        //         throw new Error(`The document ${document.title} has been updated by something else since you got this version.`);
+        //     }
+        //     const update = {
+        //         $inc: { 'rev': 1 },
+        //         $push: { revisions: { '$each': [oldDoc], '$slice': -10 } },
+        //         $set: _.omit(document, ['_id', 'revisions', 'rev'])
+        //     };
+        //     return _collection.updateOne({ _id: document._id, deleted: { $exists: false } }, update).then(result => {
+        //         if (result.matchedCount !== 1 || result.modifiedCount !== 1) {
+        //             throw new Error(`The document ${JSON.stringify(document)} may have been updated by something else since you got this version. Unexpected match or modified count: ${result}`);
+        //         }
+        //         return result;
+        //     });
+        // });
+    }
+
+    function patch(stringId, objPayload) {
+        var id = ObjectId.createFromHexString(stringId);
+        let mongoPatch = patchToMongo(objPayload, id);
+        return _collection.updateOne(mongoPatch.filter, mongoPatch.updates).then(result => {
+            if (result.matchedCount !== 1 || result.modifiedCount !== 1) {
+                return Boom.conflict('It is likely another person has changed this record before you sent your change.  Refresh the page.');
             }
-            const update = {
-                $inc: { 'rev': 1 },
-                $push: { revisions: { '$each': [oldDoc], '$slice': -10 } },
-                $set: _.omit(document, ['_id', 'revisions', 'rev'])
-            };
-            return _collection.updateOne({ _id: document._id, deleted: { $exists: false } }, update).then(result => {
-                if (result.matchedCount !== 1 || result.modifiedCount !== 1) {
-                    throw new Error(`The document ${JSON.stringify(document)} may have been updated by something else since you got this version. Unexpected match or modified count: ${result}`);
-                }
-                return result;
-            });
+            return result;
         });
     }
 
@@ -63,10 +77,10 @@ function repository(collection) {
     }
 
     function get(id) {
-        return _collection.find({ _id: id, deleted: { $exists: false } }, { revisions: 0 }).next();
+        return _collection.find({ _id: id, deleted: { $exists: false } }, { meta: 0 }).next();
     }
 
     function getAll() {
-        return _collection.find({ deleted: { $exists: false } }, { revisions: 0 }).toArray();
+        return _collection.find({ deleted: { $exists: false } }, { meta: 0 }).toArray();
     }
 }

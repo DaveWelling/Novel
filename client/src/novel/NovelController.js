@@ -15,21 +15,6 @@ function controller($scope, $state, novelService, ObjectId, EntityService, confi
         $scope.$broadcast('initComplete');
     });
 
-    // Novel Actions
-    $scope.novelSubmit = function() {
-        novelService.update($scope.novel).then(function(results) {
-            toastr.success('Novel Saved', 'Saved');
-        }).catch(function(err) {
-            console.error(err);
-            toastr.error(err.message, 'Failed to update the novel');
-        });
-    };
-
-    $scope.$on('saveNovel', function() {
-        $scope.submitMethod();
-    });
-
-
     function ensureNovelExists(results) {
         if (results.data.length === 0) {
             var novel = {
@@ -54,7 +39,6 @@ function controller($scope, $state, novelService, ObjectId, EntityService, confi
         }
     }
 
-
     function createStarterEntity(novel, entity) {
         const starterEntity = {
             _id: new ObjectId().toOid(),
@@ -70,6 +54,9 @@ function controller($scope, $state, novelService, ObjectId, EntityService, confi
         return novelService.get().then(function(results) {
             return ensureNovelExists(results).then(function(novel) {
                 $scope.novel = novel;
+                $scope.$watch('novel', function(newEntity, oldEntity) {
+                    novelService.patch(newEntity, oldEntity);
+                }, true);
             });
         }).catch(function(err) {
             console.error(err);
